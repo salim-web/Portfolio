@@ -13,7 +13,7 @@ const GITHUB_USER = 'salim-web';
 const SOCIAL_LINKS = {
   github:   `https://github.com/${GITHUB_USER}`,
   x:        '#',          // e.g. 'https://x.com/yourhandle'
-  linkedin: '#',          // e.g. 'https://linkedin.com/in/yourname'
+  linkedin: 'https://www.linkedin.com/in/salim-ahmed-b28227392/',
 };
 
 // Language → colour map (extend as needed)
