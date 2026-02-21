@@ -476,6 +476,181 @@ section {
 }
 
 /* =========================================================
+   ABOUT
+   ========================================================= */
+#about {
+    background: linear-gradient(180deg,
+            var(--bg) 0%,
+            rgba(0, 109, 56, 0.03) 100%);
+}
+
+.about-content {
+    font-size: 1.1rem;
+    color: var(--text-dim);
+    line-height: 1.8;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.about-content p {
+    margin: 0;
+}
+
+/* =========================================================
+   SKILLS
+   ========================================================= */
+#skills {
+    background: linear-gradient(180deg,
+            rgba(0, 109, 56, 0.03) 0%,
+            rgba(122, 89, 0, 0.04) 100%);
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.skill-category {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+
+.skill-category:hover {
+    transform: translateY(-4px);
+    border-color: rgba(114, 223, 150, 0.3);
+    box-shadow: var(--glow-green);
+}
+
+.skill-category h3 {
+    font-size: 1.2rem;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+.skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.skill-tag {
+    background: rgba(114, 223, 150, 0.1);
+    color: var(--primary);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-full);
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid rgba(114, 223, 150, 0.2);
+    transition: var(--transition);
+}
+
+.skill-tag:hover {
+    background: var(--primary);
+    color: var(--on-primary);
+}
+
+/* =========================================================
+   EXPERIENCE
+   ========================================================= */
+#experience {
+    background: linear-gradient(180deg,
+            rgba(122, 89, 0, 0.04) 0%,
+            rgba(0, 109, 56, 0.06) 100%);
+}
+
+.timeline {
+    position: relative;
+    max-width: 800px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 24px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--primary), var(--secondary));
+    opacity: 0.3;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 64px;
+    margin-bottom: 3rem;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-dot {
+    position: absolute;
+    left: 17px;
+    top: 6px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 3px solid var(--primary);
+    box-shadow: 0 0 12px rgba(114, 223, 150, 0.4);
+    z-index: 2;
+    transition: var(--transition);
+}
+
+.timeline-item:hover .timeline-dot {
+    background: var(--primary);
+    transform: scale(1.2);
+}
+
+.timeline-content {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 1.8rem;
+    transition: var(--transition);
+}
+
+.timeline-content:hover {
+    border-color: rgba(232, 184, 75, 0.3);
+    box-shadow: var(--glow-gold);
+    transform: translateY(-3px);
+}
+
+.timeline-content h3 {
+    font-size: 1.25rem;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+}
+
+.timeline-date {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: var(--secondary);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    background: rgba(232, 184, 75, 0.1);
+    padding: 0.3rem 0.8rem;
+    border-radius: var(--radius-full);
+}
+
+.timeline-content p {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+/* =========================================================
    PROJECTS
    ========================================================= */
 #projects {
