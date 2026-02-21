@@ -169,69 +169,111 @@ async function loadProjects() {
 }
 
 // ── CONTRIBUTION HEATMAP ───────────────────────────────
+// Uses github-contributions-api.jogruber.de which scrapes the real
+// GitHub contribution graph (identical data to what GitHub shows).
 async function loadHeatmap() {
+  const wrapper = document.querySelector('.heatmap-wrapper');
   const grid = $('heatmap-grid');
   if (!grid) return;
 
-  // Build a 52-week (364 day) date map initialised to 0
-  const DAYS = 364;
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const dayMap = {};
-  for (let i = 0; i < DAYS; i++) {
-    const d = new Date(today);
-    d.setDate(today.getDate() - (DAYS - 1 - i));
-    dayMap[d.toISOString().slice(0, 10)] = 0;
-  }
-
-  // Fetch up to 300 public events (3 pages of 100)
-  const pages = [1, 2, 3];
-  const fetches = pages.map(p =>
-    fetchJSON(API(`users/${GITHUB_USER}/events/public?per_page=100&page=${p}`))
-      .catch(() => [])
+  // Fetch real contribution data
+  const data = await fetchJSON(
+    `https://github-contributions-api.jogruber.de/v4/${GITHUB_USER}?y=last`
   );
-  const allEvents = (await Promise.all(fetches)).flat();
 
-  allEvents.forEach(ev => {
-    const key = (ev.created_at || '').slice(0, 10);
-    if (key in dayMap) dayMap[key]++;
+  // data.contributions = [ { date: '2025-02-21', count: 3, level: 0-4 }, ... ]
+  const contributions = data.contributions || [];
+  if (!contributions.length) return;
+
+  // Sort chronologically (oldest first)
+  contributions.sort((a, b) => a.date.localeCompare(b.date));
+
+  // ── Month label row ──────────────────────────────────
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const monthRow = document.createElement('div');
+  monthRow.className = 'hm-month-row';
+
+  // Track which month each column (week) starts
+  const firstDate = new Date(contributions[0].date);
+  const startDow  = firstDate.getDay(); // 0=Sun
+  // Total columns = ceil((startDow + contributions.length) / 7)
+  const totalCols  = Math.ceil((startDow + contributions.length) / 7);
+
+  let monthLabels  = []; // { col, label }
+  let lastMonth    = -1;
+  contributions.forEach((c, i) => {
+    const col   = Math.floor((startDow + i) / 7);
+    const month = new Date(c.date).getMonth();
+    if (month !== lastMonth) {
+      monthLabels.push({ col, label: MONTHS[month] });
+      lastMonth = month;
+    }
   });
 
-  // Compute max for normalisation
-  const max = Math.max(1, ...Object.values(dayMap));
+  // Build month label cells (one per column)
+  for (let col = 0; col < totalCols; col++) {
+    const span = document.createElement('span');
+    span.className = 'hm-month-label';
+    const found = monthLabels.find(m => m.col === col);
+    span.textContent = found ? found.label : '';
+    monthRow.appendChild(span);
+  }
 
-  // Render cells
+  // ── Main layout: day-labels + grid ──────────────────
+  const layout = document.createElement('div');
+  layout.className = 'hm-layout';
+
+  // Day-of-week labels
+  const dayLabels = document.createElement('div');
+  dayLabels.className = 'hm-day-labels';
+  ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach((d, i) => {
+    const span = document.createElement('span');
+    span.textContent = i % 2 === 1 ? d : ''; // only Mon/Wed/Fri to match GitHub
+    dayLabels.appendChild(span);
+  });
+
+  // Render grid cells
   grid.innerHTML = '';
 
-  // Pad the start so first column aligns to correct weekday
-  const firstDay = new Date(today);
-  firstDay.setDate(today.getDate() - (DAYS - 1));
-  const startDow = firstDay.getDay(); // 0=Sun … 6=Sat
-
+  // Pad start to align with correct weekday
   for (let pad = 0; pad < startDow; pad++) {
     const ghost = document.createElement('div');
-    ghost.style.visibility = 'hidden';
     ghost.className = 'hm-cell';
+    ghost.style.visibility = 'hidden';
     grid.appendChild(ghost);
   }
 
-  Object.entries(dayMap).forEach(([date, count]) => {
+  contributions.forEach(({ date, count, level }) => {
     const cell = document.createElement('div');
     cell.className = 'hm-cell';
-
-    let level = 0;
-    if (count > 0) {
-      const ratio = count / max;
-      if      (ratio > 0.75) level = 4;
-      else if (ratio > 0.5)  level = 3;
-      else if (ratio > 0.25) level = 2;
-      else                   level = 1;
-    }
-    cell.dataset.level = level;
-    cell.title = `${date}: ${count} event${count !== 1 ? 's' : ''}`;
+    cell.dataset.level = level; // 0-4 straight from the API — matches GitHub exactly
+    cell.title = count === 0
+      ? `No contributions on ${date}`
+      : `${count} contribution${count !== 1 ? 's' : ''} on ${date}`;
     grid.appendChild(cell);
   });
+
+  layout.appendChild(dayLabels);
+  layout.appendChild(grid);
+
+  // Replace heatmap-wrapper contents
+  wrapper.innerHTML = '';
+  wrapper.appendChild(monthRow);
+  wrapper.appendChild(layout);
+
+  // Re-append legend
+  const legend = document.createElement('div');
+  legend.className = 'heatmap-legend';
+  legend.innerHTML = `
+    <span>Less</span>
+    <span class="legend-box l0"></span>
+    <span class="legend-box l1"></span>
+    <span class="legend-box l2"></span>
+    <span class="legend-box l3"></span>
+    <span class="legend-box l4"></span>
+    <span>More</span>
+  `;
+  wrapper.appendChild(legend);
 }
 
 // ── SCROLL REVEAL ──────────────────────────────────────
