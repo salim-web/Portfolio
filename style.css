@@ -237,52 +237,68 @@ img {
 
 /* Mobile Media Query Overrides */
 @media (max-width: 640px) {
-  .menu-toggle {
-    display: flex;
-  }
+    /* 1. Ensure the hamburger stays on top */
+    .menu-toggle {
+        display: flex;
+        z-index: 1001; 
+    }
 
-  /* Transform Nav Links into a Vertical Drawer */
-  .nav-links {
-    position: fixed;
-    right: -100%; /* Hidden off-screen */
-    top: 0;
-    flex-direction: column;
-    backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
-    background: rgba(12, 17, 12, 0.6);
-    border-bottom: 1px solid var(--glass-border);
-    transition: box-shadow var(--transition);
-    width: 75%;
-    height: 100vh;
-    padding: 100px 2rem;
-    gap: 2.5rem;
-    transition: 0.4s cubic-bezier(0.2, 0, 0, 1);
-    border-left: 1px solid var(--glass-border);
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
-  }
+    /* 2. The Floating Glass Menu */
+    .nav-links {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 80px; /* Sits just below the navbar */
+        right: -100%; /* Start off-screen */
+        
+        /* Size & Shape */
+        width: 280px; 
+        padding: 2.5rem 2rem;
+        gap: 1.5rem;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--glass-border);
+        
+        /* THE BLUR FIX: Exact Navbar Settings */
+        background: rgba(12, 17, 12, 0.85); /* Slightly higher opacity for mobile legibility */
+        backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
+        -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
+        
+        /* Animation */
+        transition: right 0.4s cubic-bezier(0.2, 0, 0, 1), opacity 0.3s ease;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 1000;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), var(--glow-green);
+    }
 
-  /* When Menu is Active */
-  .nav-links.active {
-    right: 0;
-  }
+    /* 3. Slide in State */
+    .nav-links.active {
+        right: 1.25rem;
+        opacity: 1;
+        pointer-events: auto;
+    }
 
-  .nav-links a {
-    font-size: 1.2rem;
-    color: var(--text);
-  }
-
-  /* Hamburger to X Animation */
-  .menu-toggle.is-active .bar:nth-child(2) {
-    opacity: 0;
-  }
-  .menu-toggle.is-active .bar:nth-child(1) {
-    transform: translateY(9px) rotate(45deg);
-    background-color: var(--secondary);
-  }
-  .menu-toggle.is-active .bar:nth-child(3) {
-    transform: translateY(-9px) rotate(-45deg);
-    background-color: var(--secondary);
-  }
+    .nav-links a {
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: var(--text); /* Brighter green-white from your variables */
+        width: 100%;
+        display: block;
+        padding-bottom: 0.25rem;
+        border-bottom: 0.5px solid rgba(114, 223, 150, 0.1);
+    }
+/* Hamburger to X Animation */
+    .menu-toggle.is-active .bar:nth-child(2) {
+        opacity: 0;
+    }
+    .menu-toggle.is-active .bar:nth-child(1) {
+        transform: translateY(9px) rotate(45deg);
+        background-color: var(--secondary);
+    }
+    .menu-toggle.is-active .bar:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
+        background-color: var(--secondary);
+    }
 }
 /* =========================================================
    REVEAL ANIMATION
