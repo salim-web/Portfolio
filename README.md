@@ -2,7 +2,7 @@
 
 A personal portfolio website built with HTML, CSS, and Vanilla JavaScript. It features a modern "Material You 3" inspired design (Green & Gold variant), subtle glassmorphism effects, and smooth scroll animations.
 
-![Portfolio Preview](https://via.placeholder.com/800x450.png?text=Salim+Ahmed+Portfolio)
+[![My Portfolio](./prev.png)](https://example.com)
 
 ## Features
 
