@@ -90,6 +90,15 @@ navLinks.forEach((n) =>
   }),
 );
 
+// Close menu when the logo (SA.) is tapped (acts as Home link)
+const navLogo = document.querySelector(".nav-logo");
+if (navLogo) {
+  navLogo.addEventListener("click", () => {
+    menu.classList.remove("is-active");
+    menuLinks.classList.remove("active");
+  });
+}
+
 // ── HERO ───────────────────────────────────────────────
 async function loadProfile() {
   const data = await fetchJSON(API(`users/${GITHUB_USER}`));

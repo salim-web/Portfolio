@@ -7,18 +7,22 @@
 
 /* Apply Pixel font to stats and code language badges */
 .stat-num {
-    font-family: 'Silkscreen', cursive;
-    letter-spacing: 1px;
+  font-family: 'Silkscreen', cursive;
+  letter-spacing: 1px;
 }
 
 /* Custom Pixel Cursor */
-html, body {
-    /* Standard pixel-style arrow */
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M2 2v20l7-7h8l-15-13z' fill='%2372df96' stroke='black' stroke-width='1'/%3E%3C/svg%3E"), auto;
+html,
+body {
+  /* Standard pixel-style arrow */
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M2 2v20l7-7h8l-15-13z' fill='%2372df96' stroke='black' stroke-width='1'/%3E%3C/svg%3E"), auto;
 }
 
-a, button, .menu-toggle {
-cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M2 2v20l7-7h8l-15-13z' fill='%23e8b84b' stroke='%23271900' stroke-width='1.5'/%3E%3C/svg%3E"), pointer !important;}
+a,
+button,
+.menu-toggle {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M2 2v20l7-7h8l-15-13z' fill='%23e8b84b' stroke='%23271900' stroke-width='1.5'/%3E%3C/svg%3E"), pointer !important;
+}
 
 :root {
   /* ── M3 Tonal Palette — Green (Primary) ── */
@@ -127,26 +131,31 @@ body {
 
 /* Pixelated Dot Grid Overlay */
 body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    /* Uses your green primary variable for the dots */
-    background-image: radial-gradient(rgba(114, 223, 150, 0.15) 0.65px, transparent 1px);
-    background-size: 16px 16px; /* Space between pixels */
-    pointer-events: none; /* Ensures you can still click things underneath */
-    z-index: 0; 
+  content: "";
+  position: fixed;
+  inset: 0;
+  /* Uses your green primary variable for the dots */
+  background-image: radial-gradient(rgba(114, 223, 150, 0.15) 0.65px, transparent 1px);
+  background-size: 16px 16px;
+  /* Space between pixels */
+  pointer-events: none;
+  /* Ensures you can still click things underneath */
+  z-index: 0;
 }
+
 /* For mobile view */
-@media (max-width: 640px){
+@media (max-width: 640px) {
   body::before {
     content: "";
     position: fixed;
     inset: 0;
     /* Uses your green primary variable for the dots */
     background-image: radial-gradient(rgba(114, 223, 150, 0.15) 0.5px, transparent 1px);
-    background-size: 13px 13px; /* Space between pixels */
-    pointer-events: none; /* Ensures you can still click things underneath */
-    z-index: 0; 
+    background-size: 13px 13px;
+    /* Space between pixels */
+    pointer-events: none;
+    /* Ensures you can still click things underneath */
+    z-index: 0;
   }
 }
 
@@ -216,9 +225,15 @@ img {
 /* gold dot */
 
 .nav-links {
+  position: fixed;
+  top: 0;
+  right: 2.5rem;
+  height: 64px;
   display: flex;
+  align-items: center;
   gap: 2rem;
   list-style: none;
+  z-index: 101;
 }
 
 .nav-links a {
@@ -260,8 +275,13 @@ img {
   display: none;
   flex-direction: column;
   justify-content: space-between;
-  width: 30px;
-  height: 21px;
+  /* Fixed position — lives outside <nav> now */
+  position: fixed;
+  top: 14px;
+  right: 1.5rem;
+  width: 46px;
+  height: 38px;
+  padding: 8px;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -278,69 +298,95 @@ img {
 
 /* Mobile Media Query Overrides */
 @media (max-width: 640px) {
-    /* 1. Ensure the hamburger stays on top */
-    .menu-toggle {
-        display: flex;
-        z-index: 1001; 
-    }
 
-    /* 2. The Floating Glass Menu */
-    .nav-links {
-        display: flex;
-        flex-direction: column;
-        position: fixed;
-        top: 80px; /* Sits just below the navbar */
-        right: -100%; /* Start off-screen */
-        
-        /* Size & Shape */
-        width: 280px; 
-        padding: 2.5rem 2rem;
-        gap: 1.5rem;
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--glass-border);
-        
-        /* THE BLUR FIX: Exact Navbar Settings */
-        background: rgba(12, 17, 12, 0.85); /* Slightly higher opacity for mobile legibility */
-        backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
-        -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
-        
-        /* Animation */
-        transition: right 0.4s cubic-bezier(0.2, 0, 0, 1), opacity 0.3s ease;
-        opacity: 0;
-        pointer-events: none;
-        z-index: 1000;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), var(--glow-green);
-    }
+  /* 1. Hamburger — TRUE glassmorphism (button is OUTSIDE <nav>,
+        so its own backdrop-filter works independently) */
+  .menu-toggle {
+    display: flex;
+    z-index: 1001;
+    /* === GLASSMORPHISM === */
+    background: rgba(12, 17, 12, 0.55);
+    backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), var(--glow-green);
+    transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
+  }
 
-    /* 3. Slide in State */
-    .nav-links.active {
-        right: 1.25rem;
-        opacity: 1;
-        pointer-events: auto;
-    }
+  .menu-toggle:hover,
+  .menu-toggle.is-active {
+    background: rgba(12, 17, 12, 0.65);
+    border-color: var(--glass-border-h);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), var(--glow-gold);
+  }
 
-    .nav-links a {
-        font-size: 1.15rem;
-        font-weight: 600;
-        color: var(--text); /* Brighter green-white from your variables */
-        width: 100%;
-        display: block;
-        padding-bottom: 0.25rem;
-        border-bottom: 0.5px solid rgba(114, 223, 150, 0.1);
-    }
-/* Hamburger to X Animation */
-    .menu-toggle.is-active .bar:nth-child(2) {
-        opacity: 0;
-    }
-    .menu-toggle.is-active .bar:nth-child(1) {
-        transform: translateY(9px) rotate(45deg);
-        background-color: var(--secondary);
-    }
-    .menu-toggle.is-active .bar:nth-child(3) {
-        transform: translateY(-9px) rotate(-45deg);
-        background-color: var(--secondary);
-    }
+  /* 2. The Floating Glass Menu */
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 80px;
+    /* Sits just below the navbar */
+    right: -100%;
+    /* Start off-screen */
+
+    /* Size & Shape */
+    width: 280px;
+    height: auto;
+    align-items: stretch;
+    padding: 2.5rem 2rem;
+    gap: 1.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--glass-border);
+
+    /* THE BLUR FIX: Exact Navbar Settings */
+    background: rgba(12, 17, 12, 0.6);
+    backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
+
+    /* Animation */
+    transition: right 0.4s cubic-bezier(0.2, 0, 0, 1), opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1000;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), var(--glow-green);
+  }
+
+  /* 3. Slide in State */
+  .nav-links.active {
+    right: 1.25rem;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav-links a {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text);
+    /* Brighter green-white from your variables */
+    width: 100%;
+    display: block;
+    padding-bottom: 0.25rem;
+    border-bottom: 0.5px solid rgba(114, 223, 150, 0.1);
+  }
+
+  /* Hamburger to X Animation */
+  .menu-toggle.is-active .bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .menu-toggle.is-active .bar:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+    background-color: var(--secondary);
+  }
+
+  .menu-toggle.is-active .bar:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+    background-color: var(--secondary);
+  }
 }
+
 /* =========================================================
    REVEAL ANIMATION
    ========================================================= */
@@ -387,12 +433,10 @@ img {
   overflow: hidden;
   /* subtle green-gold radial gradient bg */
   background:
-    radial-gradient(
-      ellipse 80% 60% at 50% 0%,
+    radial-gradient(ellipse 80% 60% at 50% 0%,
       rgba(0, 109, 56, 0.18) 0%,
       rgba(122, 89, 0, 0.06) 50%,
-      transparent 100%
-    ),
+      transparent 100%),
     var(--bg);
 }
 
@@ -479,13 +523,10 @@ img {
   border-radius: 50%;
   border: 2px solid transparent;
   /* Green → Gold conic gradient border */
-  background: conic-gradient(
-      from 0deg,
+  background: conic-gradient(from 0deg,
       var(--md-green-80),
       var(--md-gold-80),
-      var(--md-green-80)
-    )
-    border-box;
+      var(--md-green-80)) border-box;
   -webkit-mask:
     linear-gradient(#fff 0 0) padding-box,
     linear-gradient(#fff 0 0);
@@ -510,12 +551,10 @@ img {
   letter-spacing: -0.04em;
   line-height: 1.05;
   /* Green → Gold gradient text */
-  background: linear-gradient(
-    135deg,
-    #dff1e3 0%,
-    var(--md-green-80) 40%,
-    var(--md-gold-80) 100%
-  );
+  background: linear-gradient(135deg,
+      #dff1e3 0%,
+      var(--md-green-80) 40%,
+      var(--md-gold-80) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -615,12 +654,10 @@ section {
   font-size: clamp(1.8rem, 5vw, 2.8rem);
   font-weight: 800;
   letter-spacing: -0.03em;
-  background: linear-gradient(
-    135deg,
-    var(--text) 30%,
-    var(--primary) 70%,
-    var(--secondary)
-  );
+  background: linear-gradient(135deg,
+      var(--text) 30%,
+      var(--primary) 70%,
+      var(--secondary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -637,11 +674,9 @@ section {
    ABOUT
    ========================================================= */
 #about {
-  background: linear-gradient(
-    180deg,
-    var(--bg) 0%,
-    rgba(0, 109, 56, 0.03) 100%
-  );
+  background: linear-gradient(180deg,
+      var(--bg) 0%,
+      rgba(0, 109, 56, 0.03) 100%);
 }
 
 .about-content {
@@ -662,11 +697,9 @@ section {
    SKILLS
    ========================================================= */
 #skills {
-  background: linear-gradient(
-    180deg,
-    rgba(0, 109, 56, 0.03) 0%,
-    rgba(122, 89, 0, 0.04) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(0, 109, 56, 0.03) 0%,
+      rgba(122, 89, 0, 0.04) 100%);
 }
 
 .skills-grid {
@@ -727,11 +760,9 @@ section {
    EXPERIENCE
    ========================================================= */
 #experience {
-  background: linear-gradient(
-    180deg,
-    rgba(122, 89, 0, 0.04) 0%,
-    rgba(0, 109, 56, 0.06) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(122, 89, 0, 0.04) 0%,
+      rgba(0, 109, 56, 0.06) 100%);
 }
 
 .timeline {
@@ -821,11 +852,9 @@ section {
    PROJECTS
    ========================================================= */
 #projects {
-  background: linear-gradient(
-    180deg,
-    rgba(0, 109, 56, 0.06) 0%,
-    var(--bg-2) 40%
-  );
+  background: linear-gradient(180deg,
+      rgba(0, 109, 56, 0.06) 0%,
+      var(--bg-2) 40%);
 }
 
 .projects-grid {
@@ -838,12 +867,10 @@ section {
 .project-card.skeleton {
   height: 210px;
   border-radius: var(--radius-lg);
-  background: linear-gradient(
-    90deg,
-    var(--surface) 25%,
-    rgba(114, 223, 150, 0.07) 50%,
-    var(--surface) 75%
-  );
+  background: linear-gradient(90deg,
+      var(--surface) 25%,
+      rgba(114, 223, 150, 0.07) 50%,
+      var(--surface) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }
@@ -872,10 +899,10 @@ section {
   flex-direction: column;
   gap: 0.75rem;
   overflow: hidden;
-  transition: 
-    transform var(--transition), 
-    border-color var(--transition), 
-    box-shadow var(--transition), 
+  transition:
+    transform var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition),
     background var(--transition),
     color var(--transition);
   opacity: 0;
@@ -884,7 +911,7 @@ section {
 
 
 .project-card:hover {
-  transform: translateY(-6px); 
+  transform: translateY(-6px);
   background: var(--glass-bg-h);
   border-color: rgba(114, 223, 150, 0.4);
   box-shadow: var(--glow-green);
@@ -897,6 +924,7 @@ section {
     opacity: 0;
     filter: blur(10px);
   }
+
   to {
     opacity: 1;
     filter: blur(0);
@@ -908,11 +936,9 @@ section {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(114, 223, 150, 0.07) 0%,
-    rgba(232, 184, 75, 0.04) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(114, 223, 150, 0.07) 0%,
+      rgba(232, 184, 75, 0.04) 100%);
   opacity: 0;
   transition: opacity var(--transition);
   border-radius: inherit;
@@ -1006,11 +1032,9 @@ section {
    CONTRIBUTIONS HEATMAP
    ========================================================= */
 #contributions {
-  background: linear-gradient(
-    180deg,
-    var(--bg-2) 0%,
-    rgba(122, 89, 0, 0.05) 100%
-  );
+  background: linear-gradient(180deg,
+      var(--bg-2) 0%,
+      rgba(122, 89, 0, 0.05) 100%);
 }
 
 .heatmap-wrapper {
@@ -1144,11 +1168,9 @@ section {
    CONNECT
    ========================================================= */
 #connect {
-  background: linear-gradient(
-    180deg,
-    rgba(122, 89, 0, 0.05) 0%,
-    var(--bg) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(122, 89, 0, 0.05) 0%,
+      var(--bg) 100%);
 }
 
 .social-links {
@@ -1256,4 +1278,3 @@ footer a:hover {
     padding: 5rem 1.25rem;
   }
 }
-
